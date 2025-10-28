@@ -7,6 +7,7 @@ import Transactions from './pages/Transactions';
 import Budget from './pages/Budget';
 import Analytics from './pages/Analytics';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
 import ProtectedLayout from './layout/ProtectedLayout';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/budget" element={<Budget />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>

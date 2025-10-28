@@ -1,1 +1,13 @@
-module.exports = { content: ['./index.html','./src/**/*.{js,jsx}'], theme: { extend: { colors: { primary: { DEFAULT: '#6366F1', dark: '#4F46E5', light: '#A5B4FC' }, accent: '#22d3ee' } } }, plugins: [] }
+module.exports = {
+  darkMode: 'class',
+  content: ['./index.html','./src/**/*.{js,jsx}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: { DEFAULT: '#6366F1', dark: '#4F46E5', light: '#A5B4FC' },
+        accent: '#22d3ee',
+      },
+    },
+  },
+  plugins: [],
+}

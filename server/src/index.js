@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.js';
 import transactionRoutes from './routes/transactions.js';
 import budgetRoutes from './routes/budgets.js';
 import analyticsRoutes from './routes/analytics.js';
+import connectDatabase from './config/database.js';
 
 dotenv.config();
 
@@ -29,18 +30,11 @@ app.use('/api/budget', budgetRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/expense_tracker';
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Mongo connection error:', err.message);
-    process.exit(1);
+connectDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
   });
+});
 
 
