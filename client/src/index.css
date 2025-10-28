@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global preference: keep app in dark scheme; Tailwind handles resets */
+:root { color-scheme: dark; }
+
