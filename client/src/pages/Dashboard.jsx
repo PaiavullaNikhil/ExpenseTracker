@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AreaChart, Area, PieChart, Pie, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis, BarChart, Bar, LineChart, Line } from 'recharts';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -266,8 +267,8 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-3">
           <div className="text-sm opacity-70">Recent Transactions</div>
           <div className="flex items-center gap-2">
-            <a href="/transactions" className="text-sm underline">View All</a>
-            <a href="/transactions" className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-black dark:bg-gradient-to-r dark:from-indigo-500 dark:to-cyan-400 dark:text-black">Add New</a>
+            <Link to="/transactions" className="text-sm underline">View All</Link>
+            <Link to="/transactions" className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-black dark:bg-gradient-to-r dark:from-indigo-500 dark:to-cyan-400 dark:text-black">Add New</Link>
           </div>
         </div>
         <div className="overflow-x-auto">
@@ -298,9 +299,9 @@ export default function Dashboard() {
                     </td>
                     <td className="py-2">{new Date(tx.date).toLocaleDateString()}</td>
                     <td className="py-2">
-                      <a href="/transactions" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                      <Link to="/transactions" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
                         Edit
-                      </a>
+                      </Link>
                     </td>
                   </tr>
                 ))
