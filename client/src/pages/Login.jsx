@@ -38,6 +38,11 @@ export default function Login() {
         </div>
 
         <div className="p-8 rounded-3xl border border-zinc-200/50 bg-white dark:border-white/10 dark:bg-white/5 backdrop-blur-xl shadow-xl">
+          <div className="mb-4 p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-300 text-xs md:text-sm">
+            <div className="font-semibold mb-1">Demo login credentials</div>
+            <div className="mb-1">Emails: <code className="px-1">sample@gmail.com</code></div>
+            <div>Password: <code className="px-1">sample</code></div>
+          </div>
           {error && (
             <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 text-sm">
               {error}
