@@ -15,7 +15,6 @@ async function connectWithRetry(retry = 0) {
       maxPoolSize: 10,
     });
     hasConnectedOnce = true;
-    console.log('✅ MongoDB connected successfully');
   } catch (error) {
     console.error(`❌ MongoDB connection error (attempt ${retry + 1}):`, error?.message || error);
     // Schedule a retry instead of exiting; avoids server going offline for transient outages

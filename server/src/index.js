@@ -15,7 +15,31 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+// CORS with dynamic allow-list (supports localhost and Vercel)
+const defaultOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'];
+const envOrigin = process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [];
+const envOrigins = process.env.CLIENT_URLS ? process.env.CLIENT_URLS.split(',').map(s => s.trim()).filter(Boolean) : [];
+const explicitOrigins = ['https://expense-tracker-alpha-hazel-19.vercel.app'];
+const allowedOrigins = new Set([...defaultOrigins, ...envOrigin, ...envOrigins, ...explicitOrigins]);
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser or same-origin
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    // allow all *.vercel.app
+    try {
+      const { hostname, protocol } = new URL(origin);
+      if ((protocol === 'https:' || protocol === 'http:') && hostname.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+    } catch (_) {}
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
@@ -57,5 +81,3 @@ process.on('unhandledRejection', (reason) => {
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
 });
-
-
