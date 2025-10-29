@@ -113,8 +113,8 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="md:col-span-7 p-4 rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5 backdrop-blur">
           <div className="text-sm opacity-70 mb-2">Spending by category</div>
-          <div className="h-64 overflow-x-auto">
-            <ResponsiveContainer width={600} height="100%">
+          <div className="h-64 overflow-x-auto md:overflow-x-visible">
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart data={byCategory}>
                 <XAxis dataKey="name"/>
                 <YAxis/>
@@ -126,8 +126,8 @@ export default function Dashboard() {
         </div>
         <div className="md:col-span-5 p-4 rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5 backdrop-blur">
           <div className="text-sm opacity-70 mb-2">Monthly trend</div>
-          <div className="h-64 overflow-x-auto">
-            <ResponsiveContainer width={400} height="100%">
+          <div className="h-64 overflow-x-auto md:overflow-x-visible">
+            <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={monthlyTrend}>
                 <defs>
                   <linearGradient id="incomeMonthGrad" x1="0" y1="0" x2="0" y2="1">
@@ -153,8 +153,8 @@ export default function Dashboard() {
           {/* Compact bar: income vs expense (last 6 months) */}
           <div className="md:col-span-8 p-4 rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5 backdrop-blur">
             <div className="text-sm opacity-70 mb-2">Income vs Expense (compact)</div>
-            <div className="h-40 overflow-x-auto">
-              <ResponsiveContainer width={500} height="100%">
+            <div className="h-40 overflow-x-auto md:overflow-x-visible">
+              <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyTrend}>
                   <XAxis dataKey="month"/>
                   <YAxis hide/>

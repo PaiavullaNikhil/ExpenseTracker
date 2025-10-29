@@ -1,7 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { ArrowRight, Sparkles, Shield, Zap, TrendingUp } from 'lucide-react';
 
 export default function Landing() {
+  const { isAuthenticated } = useAuth?.() || { isAuthenticated: false };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) navigate('/dashboard', { replace: true });
+  }, [isAuthenticated, navigate]);
+
   return (
     <div className="min-h-svh bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white">
       {/* Navbar */}
@@ -10,12 +19,14 @@ export default function Landing() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-400 flex items-center justify-center text-white text-lg font-bold">💰</div>
           <span>ExpenseTracker</span>
         </div>
-        <div className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition">Features</a>
-          <a href="#how-it-works" className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition">How It Works</a>
-          <Link to="/login" className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition">Login</Link>
-          <Link to="/signup" className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-black font-semibold hover:shadow-lg transition">Sign Up</Link>
-        </div>
+        {!isAuthenticated && (
+          <div className="hidden md:flex items-center gap-6">
+            <a href="#features" className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition">Features</a>
+            <a href="#how-it-works" className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition">How It Works</a>
+            <Link to="/login" className="text-sm font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition">Login</Link>
+            <Link to="/signup" className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-black font-semibold hover:shadow-lg transition">Sign Up</Link>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}

@@ -9,12 +9,13 @@ export default function Budget() {
   const [totalMonthlyLimit, setTotalMonthlyLimit] = useState('');
   const [hasMonthly, setHasMonthly] = useState(false);
   const currentMonth = new Date().toISOString().slice(0,7);
+  const [monthlyMonth, setMonthlyMonth] = useState(currentMonth);
 
   async function load() {
     try {
       const { data } = await api.get('/budget');
       setItems(data || []);
-      const monthly = (data || []).find(b => b.category === 'Monthly' && b.month === currentMonth);
+      const monthly = (data || []).find(b => b.category === 'Monthly' && b.month === monthlyMonth);
       if (monthly) {
         setHasMonthly(true);
         setTotalMonthlyLimit(String(monthly.limit || ''));
@@ -39,7 +40,7 @@ export default function Budget() {
   async function saveMonthlyBudget(e) {
     e.preventDefault();
     if (!totalMonthlyLimit) return alert('Enter monthly limit');
-    await api.post('/budget', { month: currentMonth, category: 'Monthly', limit: Number(totalMonthlyLimit) });
+    await api.post('/budget', { month: monthlyMonth, category: 'Monthly', limit: Number(totalMonthlyLimit) });
     load();
   }
 
@@ -49,7 +50,7 @@ export default function Budget() {
     alert('Reset coming soon');
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [monthlyMonth]);
 
   const pieData = progress.filter(p => p.category !== 'Monthly').map(p => ({ name: p.category, value: p.spent }));
   const barChartData = progress.filter(p => p.category !== 'Monthly');
@@ -65,11 +66,12 @@ export default function Budget() {
       {/* Monthly Budget Form */}
       <div className="p-4 rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5 backdrop-blur">
         <h3 className="font-bold mb-3">Set Monthly Budget</h3>
-        <form onSubmit={saveMonthlyBudget} className="flex gap-2">
-          <input type="number" className="px-3 py-2 rounded border border-zinc-300 bg-white text-zinc-900 dark:bg-transparent dark:text-white dark:border-white/10 flex-1" placeholder="Total monthly limit (₹)" value={totalMonthlyLimit} onChange={(e)=>setTotalMonthlyLimit(e.target.value)} />
-          <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-black dark:bg-gradient-to-r dark:from-indigo-500 dark:to-cyan-400 dark:text-black">{hasMonthly ? 'Update' : 'Save'}</button>
+        <form onSubmit={saveMonthlyBudget} className="grid grid-cols-1 md:grid-cols-5 gap-2">
+          <input type="month" className="px-3 py-2 rounded border border-zinc-300 bg-white text-zinc-900 dark:bg-transparent dark:text-white dark:border-white/10 md:col-span-1" value={monthlyMonth} onChange={(e)=>setMonthlyMonth(e.target.value)} />
+          <input type="number" className="px-3 py-2 rounded border border-zinc-300 bg-white text-zinc-900 dark:bg-transparent dark:text-white dark:border-white/10 md:col-span-3" placeholder="Total monthly limit (₹)" value={totalMonthlyLimit} onChange={(e)=>setTotalMonthlyLimit(e.target.value)} />
+          <button className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-400 text-black dark:bg-gradient-to-r dark:from-indigo-500 dark:to-cyan-400 dark:text-black md:col-span-1 w-full">{hasMonthly ? 'Update' : 'Save'}</button>
         </form>
-        <div className="text-xs opacity-70 mt-2">Current month: {currentMonth} {hasMonthly && `(set to ₹${totalMonthlyLimit})`}</div>
+        <div className="text-xs opacity-70 mt-2">Selected month: {monthlyMonth} {hasMonthly && `(set to ₹${totalMonthlyLimit})`}</div>
       </div>
 
       {/* Category Budget Form */}
@@ -122,9 +124,9 @@ export default function Budget() {
         </div>
         <div className="p-4 rounded-2xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5 backdrop-blur">
           <div className="text-sm opacity-70 mb-2">Category comparison</div>
-          <div className="h-64 overflow-x-auto">
+          <div className="h-64 overflow-x-auto md:overflow-x-visible">
             {progress.length ? (
-            <ResponsiveContainer width={600} height="100%">
+            <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barChartData}>
                 <XAxis dataKey="category"/>
                 <YAxis/>

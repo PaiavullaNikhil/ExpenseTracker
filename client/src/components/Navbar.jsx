@@ -13,8 +13,9 @@ export default function Navbar({ onMenuClick }) {
         <button onClick={onMenuClick} className="md:hidden p-2 hover:bg-zinc-100 dark:hover:bg-white/10 rounded-lg">
           <Menu size={24} />
         </button>
-        <div className="font-extrabold text-base md:text-lg tracking-tight flex items-center gap-2">
-          ExpenseTracker 💰
+        <div className="font-extrabold text-xl md:text-2xl tracking-tight flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-400 flex items-center justify-center text-white text-lg font-bold">💰</div>
+          <span>ExpenseTracker</span>
         </div>
       </div>
       <div className="flex items-center gap-2">

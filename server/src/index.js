@@ -24,6 +24,19 @@ app.get('/', (_req, res) => {
   res.json({ status: 'ok', message: 'Expense Tracker API' });
 });
 
+// Simple health endpoint with DB status for monitoring
+app.get('/health', (_req, res) => {
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting', 'unauthorized', 'unknown'];
+  let dbState = 'unknown';
+  try {
+    // Lazy require to avoid a hard dep loop
+    // eslint-disable-next-line global-require
+    const mongoose = require('mongoose');
+    dbState = states[mongoose.connection.readyState] || String(mongoose.connection.readyState);
+  } catch (_) {}
+  res.json({ status: 'ok', db: dbState, uptime: process.uptime() });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budget', budgetRoutes);
@@ -35,6 +48,14 @@ connectDatabase().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
+});
+
+// Catch unhandled rejections/exceptions so the process doesn't crash unexpectedly
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
 });
 
 
