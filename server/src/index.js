@@ -15,33 +15,14 @@ dotenv.config();
 
 const app = express();
 
-// CORS with dynamic allow-list (supports localhost and Vercel)
-const defaultOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'];
-const envOrigin = process.env.CLIENT_URL ? [process.env.CLIENT_URL] : [];
-const envOrigins = process.env.CLIENT_URLS ? process.env.CLIENT_URLS.split(',').map(s => s.trim()).filter(Boolean) : [];
-const explicitOrigins = ['https://expense-tracker-alpha-hazel-19.vercel.app'];
-const allowedOrigins = new Set([...defaultOrigins, ...envOrigin, ...envOrigins, ...explicitOrigins]);
-
-const corsOptions = {
-  origin(origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser or same-origin
-    if (allowedOrigins.has(origin)) return callback(null, true);
-    // allow all *.vercel.app
-    try {
-      const { hostname, protocol } = new URL(origin);
-      if ((protocol === 'https:' || protocol === 'http:') && hostname.endsWith('.vercel.app')) {
-        return callback(null, true);
-      }
-    } catch (_) {}
-    return callback(new Error(`Not allowed by CORS: ${origin}`));
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-// Express 5 uses path-to-regexp v6; use regex or explicit paths for OPTIONS
-app.options('/', cors(corsOptions));
-app.options(/^\/api\/.*$/, cors(corsOptions));
+// Simple single-origin CORS (beginner-friendly)
+const clientOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
+app.use(cors({ origin: clientOrigin, credentials: true }));
+// Minimal preflight handling without complex path patterns
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  return next();
+});
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
