@@ -39,7 +39,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('/*', cors(corsOptions));
+// Express 5 path-to-regexp v6: avoid '/*' wildcard; use explicit patterns
+app.options(['/','/api/(.*)'], cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
